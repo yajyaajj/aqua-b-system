@@ -64,10 +64,36 @@ if (!$isLoggedIn && !in_array($page, $allowedPages, true)) {
 }
 
 // ----- Route to controller -----
-$controllerFile = __DIR__ . '/controllers/' . $page . '_controller.php';
+$controllerMap = [
+    'login'     => ['file' => 'AuthController.php',      'handler' => 'handleAuth'],
+    'logout'    => ['file' => 'AuthController.php',      'handler' => 'handleAuth'],
+    'dashboard' => ['file' => 'DashboardController.php', 'handler' => 'handleDashboard'],
+    'products'  => ['file' => 'ProductController.php',   'handler' => 'handleProducts'],
+    'customers' => ['file' => 'CustomerController.php',  'handler' => 'handleCustomers'],
+    'orders'    => ['file' => 'OrderController.php',     'handler' => 'handleOrders'],
+    'payments'  => ['file' => 'PaymentController.php',   'handler' => 'handlePayments'],
+    'reports'   => ['file' => 'ReportController.php',    'handler' => 'handleReports'],
+    'users'     => ['file' => 'UserController.php',      'handler' => 'handleUsers'],
+];
 
-if (file_exists($controllerFile)) {
-    require_once $controllerFile;
+if (isset($controllerMap[$page])) {
+    $ctrl = $controllerMap[$page];
+    $controllerFile = __DIR__ . '/controllers/' . $ctrl['file'];
+
+    if (file_exists($controllerFile)) {
+        require_once $controllerFile;
+
+        // Override action for logout page
+        if ($page === 'logout') {
+            $action = 'logout';
+        }
+
+        $ctrl['handler']($action);
+    } else {
+        http_response_code(404);
+        echo '<h1>404 — Page Not Found</h1>';
+        echo '<p>The requested controller could not be found.</p>';
+    }
 } else {
     http_response_code(404);
     echo '<h1>404 — Page Not Found</h1>';
