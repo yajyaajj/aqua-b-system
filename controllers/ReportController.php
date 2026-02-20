@@ -10,6 +10,9 @@ require_once __DIR__ . '/../models/Payment.php';
 require_once __DIR__ . '/../models/Order.php';
 require_once __DIR__ . '/../models/Product.php';
 
+const MIN_REPORT_YEAR = 2000;
+const MAX_REPORT_YEAR = 2100;
+
 function handleReports($action)
 {
     $isAdmin = (isset($_SESSION['role_id']) && (int)$_SESSION['role_id'] === 1);
@@ -39,7 +42,7 @@ function handleReports($action)
             $year  = (int)($_GET['year'] ?? date('Y'));
             $month = (int)($_GET['month'] ?? date('n'));
 
-            if ($year < 2000 || $year > 2100) {
+            if ($year < MIN_REPORT_YEAR || $year > MAX_REPORT_YEAR) {
                 $year = (int)date('Y');
             }
             if ($month < 1 || $month > 12) {

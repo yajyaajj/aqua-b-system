@@ -7,6 +7,8 @@
 
 require_once __DIR__ . '/../models/User.php';
 
+const MIN_PASSWORD_LENGTH = 6;
+
 function handleUsers($action)
 {
     $isAdmin = (isset($_SESSION['role_id']) && (int)$_SESSION['role_id'] === 1);
@@ -157,10 +159,10 @@ function validateUserInput(array $data, User $userModel, int $editId = 0): array
 
     // Password required for new users, optional for updates
     $password = $data['password'] ?? '';
-    if ($editId === 0 && strlen($password) < 6) {
-        $errors[] = 'Password must be at least 6 characters.';
-    } elseif ($editId > 0 && $password !== '' && strlen($password) < 6) {
-        $errors[] = 'Password must be at least 6 characters.';
+    if ($editId === 0 && strlen($password) < MIN_PASSWORD_LENGTH) {
+        $errors[] = 'Password must be at least ' . MIN_PASSWORD_LENGTH . ' characters.';
+    } elseif ($editId > 0 && $password !== '' && strlen($password) < MIN_PASSWORD_LENGTH) {
+        $errors[] = 'Password must be at least ' . MIN_PASSWORD_LENGTH . ' characters.';
     }
 
     if (empty(trim($data['full_name'] ?? ''))) {
