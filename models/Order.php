@@ -82,7 +82,8 @@ class Order
                  VALUES (:order_id, :product_id, :quantity, :unit_price, :subtotal)'
             );
             $stockStmt = $this->db->prepare(
-                'UPDATE products SET quantity_in_stock = quantity_in_stock - :quantity WHERE id = :id'
+                'UPDATE products SET quantity_in_stock = quantity_in_stock - :quantity
+                 WHERE id = :id AND quantity_in_stock >= :qty_check'
             );
 
             foreach ($items as $item) {
@@ -95,9 +96,13 @@ class Order
                 ]);
 
                 $stockStmt->execute([
-                    ':quantity' => $item['quantity'],
-                    ':id'      => $item['product_id'],
+                    ':quantity'  => $item['quantity'],
+                    ':id'        => $item['product_id'],
+                    ':qty_check' => $item['quantity'],
                 ]);
+                if ($stockStmt->rowCount() === 0) {
+                    throw new \RuntimeException('Insufficient stock for product ID ' . $item['product_id']);
+                }
             }
 
             $this->db->commit();
@@ -209,7 +214,8 @@ class Order
         $last = $stmt->fetch();
 
         if ($last) {
-            $lastSeq = (int) substr($last['order_number'], -3);
+            $seq = substr($last['order_number'], -3);
+            $lastSeq = is_numeric($seq) ? (int) $seq : 0;
             $nextSeq = $lastSeq + 1;
         } else {
             $nextSeq = 1;

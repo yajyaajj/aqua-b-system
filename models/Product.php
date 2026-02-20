@@ -107,10 +107,18 @@ class Product
     public function updateStock(int $id, int $quantity, string $type = 'subtract'): bool
     {
         if ($type === 'subtract') {
-            $stmt = $this->db->prepare('UPDATE products SET quantity_in_stock = quantity_in_stock - :quantity WHERE id = :id');
-        } else {
-            $stmt = $this->db->prepare('UPDATE products SET quantity_in_stock = quantity_in_stock + :quantity WHERE id = :id');
+            $stmt = $this->db->prepare(
+                'UPDATE products SET quantity_in_stock = quantity_in_stock - :quantity
+                 WHERE id = :id AND quantity_in_stock >= :quantity'
+            );
+            $stmt->execute([':quantity' => $quantity, ':id' => $id]);
+            if ($stmt->rowCount() === 0) {
+                throw new \RuntimeException('Insufficient stock for product ID ' . $id);
+            }
+            return true;
         }
+
+        $stmt = $this->db->prepare('UPDATE products SET quantity_in_stock = quantity_in_stock + :quantity WHERE id = :id');
         return $stmt->execute([':quantity' => $quantity, ':id' => $id]);
     }
 
