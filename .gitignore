@@ -19,7 +19,6 @@ node_modules/
 Thumbs.db
 
 # OS files
-.DS_Store
 desktop.ini
 
 # Compiled / cached files

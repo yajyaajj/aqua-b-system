@@ -16,6 +16,10 @@ session_start();
 $page   = $_GET['page']   ?? '';
 $action = $_GET['action'] ?? 'index';
 
+// Sanitize: allow only alphanumeric characters and underscores
+$page   = preg_replace('/[^a-z0-9_]/i', '', $page);
+$action = preg_replace('/[^a-z0-9_]/i', '', $action);
+
 // Allowed pages that map to controller files
 $allowedPages = [
     'login',
