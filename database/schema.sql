@@ -59,7 +59,10 @@ CREATE TABLE products (
     updated_at        TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     INDEX idx_products_category (category),
-    INDEX idx_products_product_name (product_name)
+    INDEX idx_products_product_name (product_name),
+    CHECK (quantity_in_stock >= 0),
+    CHECK (cost_price >= 0),
+    CHECK (selling_price >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -----------------------------------------------------
@@ -95,6 +98,7 @@ CREATE TABLE orders (
     INDEX idx_orders_user_id (user_id),
     INDEX idx_orders_status (status),
     INDEX idx_orders_created_at (created_at),
+    CHECK (total_amount >= 0),
     CONSTRAINT fk_orders_customer
         FOREIGN KEY (customer_id) REFERENCES customers (id)
         ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -116,6 +120,9 @@ CREATE TABLE order_items (
     PRIMARY KEY (id),
     INDEX idx_order_items_order_id (order_id),
     INDEX idx_order_items_product_id (product_id),
+    CHECK (quantity > 0),
+    CHECK (unit_price >= 0),
+    CHECK (subtotal >= 0),
     CONSTRAINT fk_order_items_order
         FOREIGN KEY (order_id) REFERENCES orders (id)
         ON DELETE CASCADE ON UPDATE CASCADE,
@@ -140,6 +147,7 @@ CREATE TABLE payments (
     INDEX idx_payments_received_by (received_by),
     INDEX idx_payments_payment_date (payment_date),
     INDEX idx_payments_payment_method (payment_method),
+    CHECK (amount > 0),
     CONSTRAINT fk_payments_order
         FOREIGN KEY (order_id) REFERENCES orders (id)
         ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -165,6 +173,7 @@ CREATE TABLE stock_movements (
     INDEX idx_stock_movements_type (type),
     INDEX idx_stock_movements_created_by (created_by),
     INDEX idx_stock_movements_created_at (created_at),
+    CHECK (quantity > 0),
     CONSTRAINT fk_stock_movements_product
         FOREIGN KEY (product_id) REFERENCES products (id)
         ON DELETE RESTRICT ON UPDATE CASCADE,
