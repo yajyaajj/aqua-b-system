@@ -28,7 +28,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <p class="text-muted mb-1 small text-uppercase fw-semibold">Monthly Revenue</p>
-                        <h3 class="fw-bold text-primary mb-0">₱<?php echo number_format($monthlyRevenue, 2); ?></h3>
+                        <h3 class="fw-bold text-primary mb-0">₱<?php echo number_format($currentMonthRevenue, 2); ?></h3>
                     </div>
                     <div class="bg-primary bg-opacity-10 rounded-3 p-3">
                         <i class="bi bi-graph-up text-primary" style="font-size: 1.5rem;"></i>
@@ -92,12 +92,12 @@
                         <tbody>
                             <?php foreach ($lowStockProducts as $product): ?>
                             <tr>
-                                <td class="fw-semibold"><?php echo htmlspecialchars($product['name']); ?></td>
+                                <td class="fw-semibold"><?php echo htmlspecialchars($product['product_name']); ?></td>
                                 <td><?php echo htmlspecialchars($product['category']); ?></td>
-                                <td class="text-center"><?php echo (int) $product['stock']; ?></td>
+                                <td class="text-center"><?php echo (int) $product['quantity_in_stock']; ?></td>
                                 <td class="text-center"><?php echo (int) $product['reorder_level']; ?></td>
                                 <td class="text-center">
-                                    <?php if ((int) $product['stock'] === 0): ?>
+                                    <?php if ((int) $product['quantity_in_stock'] === 0): ?>
                                         <span class="badge bg-danger">Out of Stock</span>
                                     <?php else: ?>
                                         <span class="badge bg-warning text-dark">Low Stock</span>

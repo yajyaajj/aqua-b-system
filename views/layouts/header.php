@@ -9,7 +9,7 @@
     <link href="/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <?php if (isset($_SESSION['user'])): ?>
+    <?php if (isset($_SESSION['user_id'])): ?>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
             <a class="navbar-brand" href="/dashboard">
@@ -35,7 +35,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/payments"><i class="bi bi-credit-card me-1"></i>Payments</a>
                     </li>
-                    <?php if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin'): ?>
+                    <?php if (isset($_SESSION['role_id']) && (int) $_SESSION['role_id'] === 1): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="/reports"><i class="bi bi-bar-chart me-1"></i>Reports</a>
                     </li>
@@ -46,7 +46,7 @@
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <span class="nav-link"><i class="bi bi-person-circle me-1"></i><?php echo htmlspecialchars($_SESSION['user']['name'] ?? ''); ?></span>
+                        <span class="nav-link"><i class="bi bi-person-circle me-1"></i><?php echo htmlspecialchars($_SESSION['full_name'] ?? ''); ?></span>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout"><i class="bi bi-box-arrow-right me-1"></i>Logout</a>
@@ -59,9 +59,13 @@
 
     <div class="container mt-4">
         <?php if (isset($_SESSION['flash_message'])): ?>
-            <div class="alert alert-<?php echo htmlspecialchars($_SESSION['flash_message']['type']); ?> alert-dismissible fade show" role="alert">
-                <?php echo htmlspecialchars($_SESSION['flash_message']['message']); ?>
+            <?php
+                $flashType = $_SESSION['flash_type'] ?? 'info';
+                $alertClass = ($flashType === 'error') ? 'danger' : htmlspecialchars($flashType);
+            ?>
+            <div class="alert alert-<?php echo $alertClass; ?> alert-dismissible fade show" role="alert">
+                <?php echo htmlspecialchars($_SESSION['flash_message']); ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
-            <?php unset($_SESSION['flash_message']); ?>
+            <?php unset($_SESSION['flash_message'], $_SESSION['flash_type']); ?>
         <?php endif; ?>
