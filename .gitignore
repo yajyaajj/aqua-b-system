@@ -1,0 +1,27 @@
+# Dependencies
+vendor/
+node_modules/
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS files
+.DS_Store
+desktop.ini
+
+# Compiled / cached files
+*.cache
+*.tmp

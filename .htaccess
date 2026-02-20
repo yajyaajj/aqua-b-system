@@ -1,0 +1,34 @@
+# =====================================================
+# Aqua B Water Refilling Station — Apache Configuration
+# =====================================================
+
+# ----- Character Encoding -----
+AddDefaultCharset UTF-8
+
+# ----- Rewrite Engine -----
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect requests for directories to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [L,QSA]
+</IfModule>
+
+# ----- Protect Sensitive Directories -----
+<IfModule mod_authz_core.c>
+    # Apache 2.4+
+    <DirectoryMatch "^.*/config/">
+        Require all denied
+    </DirectoryMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+    # Apache 2.2
+    <DirectoryMatch "^.*/config/">
+        Order deny,allow
+        Deny from all
+    </DirectoryMatch>
+</IfModule>
+
+# ----- Prevent directory listing -----
+Options -Indexes
