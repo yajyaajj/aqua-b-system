@@ -37,9 +37,12 @@
                                 <a href="<?php echo BASE_URL; ?>/index.php?page=customers&action=edit&id=<?php echo (int) $customer['id']; ?>" class="btn btn-sm btn-outline-primary" title="Edit">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <a href="<?php echo BASE_URL; ?>/index.php?page=customers&action=delete&id=<?php echo (int) $customer['id']; ?>" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this customer?');">
-                                    <i class="bi bi-trash"></i>
-                                </a>
+                                <form action="<?php echo BASE_URL; ?>/index.php?page=customers&action=delete" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this customer?');">
+                                    <input type="hidden" name="id" value="<?php echo (int) $customer['id']; ?>">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         <?php endforeach; ?>

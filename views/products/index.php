@@ -50,9 +50,12 @@
                                     <i class="bi bi-box-arrow-in-down"></i>
                                 </a>
                                 <?php if (isset($_SESSION['role_id']) && (int) $_SESSION['role_id'] === 1): ?>
-                                <a href="<?php echo BASE_URL; ?>/index.php?page=products&action=delete&id=<?php echo (int) $product['id']; ?>" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this product?');">
-                                    <i class="bi bi-trash"></i>
-                                </a>
+                                <form action="<?php echo BASE_URL; ?>/index.php?page=products&action=delete" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                    <input type="hidden" name="id" value="<?php echo (int) $product['id']; ?>">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
                                 <?php endif; ?>
                             </td>
                         </tr>

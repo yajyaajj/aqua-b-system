@@ -28,7 +28,7 @@
         <div class="card border-0 shadow-sm">
             <div class="card-body">
                 <form action="<?php echo BASE_URL; ?>/index.php?page=products&action=stock_in" method="POST" novalidate>
-                    <input type="hidden" name="id" value="<?php echo (int) $product['id']; ?>">
+                    <input type="hidden" name="product_id" value="<?php echo (int) $product['id']; ?>">
 
                     <div class="mb-3">
                         <label for="quantity" class="form-label">Quantity to Add <span class="text-danger">*</span></label>
